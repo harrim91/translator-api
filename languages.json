@@ -1,0 +1,95 @@
+{
+  "supported": [
+    "ar",
+    "cs",
+    "da",
+    "de",
+    "en",
+    "es",
+    "fi",
+    "fr",
+    "he",
+    "id",
+    "it",
+    "ja",
+    "ko",
+    "nl",
+    "no",
+    "pl",
+    "pt",
+    "ru",
+    "sv",
+    "tr",
+    "zh"
+  ],
+  "voices": [
+    {
+      "languageCode": "ar",
+      "id": "Zeina"
+    },
+    {
+      "languageCode": "da",
+      "id": "Mads"
+    },
+    {
+      "languageCode": "de",
+      "id": "Hans"
+    },
+    {
+      "languageCode": "en",
+      "id": "Emma"
+    },
+    {
+      "languageCode": "es",
+      "id": "Mia"
+    },
+    {
+      "languageCode": "fr",
+      "id": "Lea"
+    },
+    {
+      "languageCode": "it",
+      "id": "Giorgio"
+    },
+    {
+      "languageCode": "ja",
+      "id": "Mizuki"
+    },
+    {
+      "languageCode": "ko",
+      "id": "Seoyeon"
+    },
+    {
+      "languageCode": "nl",
+      "id": "Lotte"
+    },
+    {
+      "languageCode": "no",
+      "id": "Liv"
+    },
+    {
+      "languageCode": "pl",
+      "id": "Maja"
+    },
+    {
+      "languageCode": "pt",
+      "id": "Cristiano"
+    },
+    {
+      "languageCode": "ru",
+      "id": "Tatyana"
+    },
+    {
+      "languageCode": "sv",
+      "id": "Astrid"
+    },
+    {
+      "languageCode": "tr",
+      "id": "Filiz"
+    },
+    {
+      "languageCode": "zh",
+      "id": "Zhiyu"
+    }
+  ]
+}

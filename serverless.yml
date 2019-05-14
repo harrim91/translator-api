@@ -1,0 +1,66 @@
+service: translator
+
+frameworkVersion: "=1.42.3"
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  region: eu-west-1
+  stage: ${opt:stage, 'dev'}
+  environment:
+    TRANSLATION_BUCKET_NAME:
+      Ref: TranslationsBucket
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "s3:PutObject"
+      Resource: "*"
+    - Effect: "Allow"
+      Action:
+        - "s3:PutObject"
+      Resource:
+        Fn::Join:
+          - ''
+          - - 'arn:aws:s3:::'
+            - Ref: TranslationsBucket
+            - /*
+
+functions:
+  translate:
+    handler: handler.translate
+    events:
+      - http:
+          path: "/translate"
+          method: post
+
+resources:
+  Resources:
+    TranslationsBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: translator-service-${self:provider.stage}-translations
+        LifecycleConfiguration:
+          Rules:
+            - ExpirationInDays: 1
+              Status: Enabled
+
+    TranslationsBucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        PolicyDocument:
+          Id: TranslationsBucketPolicy
+          Version: "2012-10-17"
+          Statement:
+            - Sid: PublicReadForGetBucketObjects
+              Effect: Allow
+              Principal: '*'
+              Action:
+                - 's3:GetObject'
+              Resource:
+                Fn::Join:
+                  - ''
+                  - - 'arn:aws:s3:::'
+                    - Ref: TranslationsBucket
+                    - /*
+        Bucket:
+          Ref: TranslationsBucket
