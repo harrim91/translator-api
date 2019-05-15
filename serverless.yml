@@ -13,25 +13,41 @@ provider:
   iamRoleStatements:
     - Effect: "Allow"
       Action:
-        - "s3:PutObject"
+        - "translate:TranslateText"
+        - "comprehend:DetectDominantLanguage"
+        - "polly:SynthesizeSpeech"
+        - "rekognition:DetectText"
+        # - "rekognition:DetectLabels"
       Resource: "*"
     - Effect: "Allow"
       Action:
+        - "s3:GetObject"
         - "s3:PutObject"
       Resource:
         Fn::Join:
-          - ''
-          - - 'arn:aws:s3:::'
-            - Ref: TranslationsBucket
-            - /*
+          - ""
+          - - Fn::GetAtt: [TranslationsBucket, Arn]
+            - "/*"
+    - Effect: "Allow"
+      Action:
+        - "s3:ListBucket"
+      Resource:
+        Fn::GetAtt: [TranslationsBucket, Arn]
 
 functions:
   translate:
     handler: handler.translate
+    timeout: 30
     events:
       - http:
           path: "/translate"
           method: post
+  upload:
+    handler: handler.upload
+    events:
+      - http:
+          path: "/upload"
+          method: get
 
 resources:
   Resources:
@@ -61,6 +77,19 @@ resources:
                   - ''
                   - - 'arn:aws:s3:::'
                     - Ref: TranslationsBucket
-                    - /*
+                    - /translations/*
+            - Sid: WriteAccessForSignedUrlUploads
+              Effect: Allow
+              Principal:
+                AWS:
+                  - Fn::GetAtt: [IamRoleLambdaExecution, Arn]
+              Action:
+                - 's3:PutObject'
+              Resource:
+                Fn::Join:
+                  - ''
+                  - - 'arn:aws:s3:::'
+                    - Ref: TranslationsBucket
+                    - /files/*
         Bucket:
           Ref: TranslationsBucket
