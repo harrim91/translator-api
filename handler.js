@@ -59,6 +59,12 @@ module.exports.translate = async (event) => {
       // }
     }
 
+    if (text.length === 0) {
+      return respond(400, {
+        error: 'Unable to process translation - no text was submitted.',
+      });
+    }
+
     const data = await new AWS.Translate().translateText({
       Text: text,
       SourceLanguageCode: body.from || 'auto',

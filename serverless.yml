@@ -61,6 +61,12 @@ resources:
           Rules:
             - ExpirationInDays: 1
               Status: Enabled
+        CorsConfiguration:
+          CorsRules:
+            - AllowedMethods:
+                - PUT
+              AllowedOrigins:
+                - "*"
 
     TranslationsBucketPolicy:
       Type: AWS::S3::BucketPolicy
