@@ -3,6 +3,15 @@
 const AWS = require('aws-sdk');
 const { supported, voices } = require('./languages.json');
 
+const respond = (statusCode, body) => ({
+  statusCode,
+  headers: {
+    'Access-Control-Allow-Origin': '*',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify(body),
+});
+
 module.exports.translate = async (event) => {
   const body = JSON.parse(event.body);
 
@@ -73,21 +82,15 @@ module.exports.translate = async (event) => {
       }).promise();
     }
 
-    return {
-      statusCode: 200,
-      body: JSON.stringify({
-        source: text,
-        translation: data.TranslatedText,
-        audio: file && file.Location,
-        sourceLanguage: data.SourceLanguageCode,
-        targetLanguage: data.TargetLanguageCode,
-      }),
-    };
+    return respond(200, {
+      source: text,
+      translation: data.TranslatedText,
+      audio: file && file.Location,
+      sourceLanguage: data.SourceLanguageCode,
+      targetLanguage: data.TargetLanguageCode,
+    });
   } catch (error) {
-    return {
-      statusCode: error.statusCode,
-      body: JSON.stringify({ error: error.message }),
-    };
+    return respond(error.statusCode, { error: error.message });
   }
 };
 
@@ -102,15 +105,9 @@ module.exports.upload = () => {
       Expires: 300,
     }, (error, url) => {
       if (error) {
-        resolve({
-          statusCode: error.statusCode,
-          body: JSON.stringify({ error: error.message }),
-        });
+        resolve(respond(error.statusCode, { error: error.message }));
       } else {
-        resolve({
-          statusCode: 200,
-          body: JSON.stringify({ url, key }),
-        });
+        resolve(respond(200, { url, key }));
       }
     });
   });

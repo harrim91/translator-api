@@ -42,12 +42,14 @@ functions:
       - http:
           path: "/translate"
           method: post
+          cors: true
   upload:
     handler: handler.upload
     events:
       - http:
           path: "/upload"
           method: get
+          cors: true
 
 resources:
   Resources:
