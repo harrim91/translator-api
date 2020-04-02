@@ -16,17 +16,15 @@ module.exports.translate = async (event) => {
   const body = JSON.parse(event.body);
 
   if (!(body.to && supported.includes(body.to.toLowerCase()))) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({ error: 'Invalid target language code provided.' }),
-    };
+    return respond(400, {
+      error: 'Invalid target language code provided.',
+    });
   }
 
   try {
     const s3 = new AWS.S3();
 
     let text = body.text || '';
-
 
     if (body.file) {
       const { Body } = await s3.getObject({
